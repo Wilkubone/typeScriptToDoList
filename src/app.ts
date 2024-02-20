@@ -1,14 +1,15 @@
+import { Task, Category } from "./types/types";
+import { render } from "./helpers/render-tasks.helper.js";
+import { render as renderCategories } from "./helpers/render-categories.helper.js"
+
 const taskNameInputElement: HTMLInputElement = document.querySelector("#name");
 const addButtonElement: HTMLButtonElement = document.querySelector("button");
 const tasksContainerElement: HTMLElement = document.querySelector(".tasks");
+const categoriesContainerElement: HTMLElement = document.querySelector(".categories");
 
-interface Task {
-	name: string;
-	done: boolean;
-	category?: string;
-}
+let selectedCategory: Category;
 
-const categories: string[] = ["general", "gym", "work", "hobby"];
+const categories: Category[] = ["general", "gym", "work", "hobby"];
 
 const tasks: Task[] = [
 	{
@@ -28,43 +29,17 @@ const tasks: Task[] = [
 	},
 ];
 
-const render = () => {
-	tasksContainerElement.innerHTML = "";
-	tasks.forEach((task, index) => {
-		const taskElement: HTMLElement = document.createElement("li");
-		if (task.category) {
-			taskElement.classList.add(task.category);
-		}
-		const id: string = `task-${index}`;
-
-		const labelElement: HTMLLabelElement = document.createElement("label");
-		labelElement.innerText = task.name;
-		labelElement.setAttribute("for", id);
-
-		const checkboxElement: HTMLInputElement = document.createElement("input");
-		checkboxElement.type = "checkbox";
-		checkboxElement.name = task.name;
-		checkboxElement.id = id;
-		checkboxElement.checked = task.done;
-		checkboxElement.addEventListener("change", () => {
-			task.done = !task.done;
-		});
-
-		taskElement.appendChild(labelElement);
-		taskElement.appendChild(checkboxElement);
-
-		tasksContainerElement.appendChild(taskElement);
-	});
-};
-
 const addTask = (task: Task) => {
 	tasks.push(task);
 };
 
 addButtonElement.addEventListener("click", (event: Event) => {
+   
 	event.preventDefault();
-	addTask({ name: taskNameInputElement.value, done: false });
-	render();
+	addTask({ name: taskNameInputElement.value, done: false, category: selectedCategory, });
+	render(tasks, tasksContainerElement);
 });
 
-render();
+addTask({name: "zrobic nogi", category: "gym", done: false, });
+renderCategories(categories, categoriesContainerElement, selectedCategory);
+render(tasks, tasksContainerElement);
