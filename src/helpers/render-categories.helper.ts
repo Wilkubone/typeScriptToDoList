@@ -1,6 +1,25 @@
-import { Category } from "../types/types";
+import { Category } from "../types/types.js";
 
-export const render = (categories: Category[], categoriesContainerElement:HTMLElement, selectedCategory: Category) => {
+const handleCategoryChange = (category: Category) => {
+    if (category === Category.GENERAL) {
+        console.log('Zmiana general!')
+    }else if (category === Category.GYM) {
+        alert("Lecisz na silke")
+    }else if (category === Category.HOBBY) {
+        document.body.style.background = "red";
+    }else if (category === Category.WORK) {
+        console.log('Zmiana na work!');
+        alert("Praca poplaca");
+        document.body.style.background = "green";
+    }else if (category === Category.SOCIAL) {
+        document.body.style.background = "yellow";
+    }else {
+        const never: never = category;
+        console.log(never);
+    }
+};
+
+export const render = (categories: Category[], categoriesContainerElement:HTMLElement, inputChangeCallback: (category: Category)=> void ) => {
     categories.forEach((category) => {
         const categoryElement: HTMLElement = document.createElement("li");
 
@@ -11,7 +30,8 @@ export const render = (categories: Category[], categoriesContainerElement:HTMLEl
         radioInputElement.value = category;
         radioInputElement.id = `category-${category}`;
         radioInputElement.addEventListener("change", () => {
-            selectedCategory = category;
+            inputChangeCallback(category);
+            handleCategoryChange(category);
         });
 
         const labelElement: HTMLLabelElement = document.createElement("label");
@@ -24,3 +44,6 @@ export const render = (categories: Category[], categoriesContainerElement:HTMLEl
         categoriesContainerElement.appendChild(categoryElement);
     });
 };
+
+
+
