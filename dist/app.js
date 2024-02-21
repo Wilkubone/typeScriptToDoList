@@ -1,6 +1,7 @@
-import { Category } from "./types/types.js";
+import { Task, Category } from "./types/types.js";
 import renderTasks from "./helpers/render-tasks.helper.js";
 import { render as renderCategories } from "./helpers/render-categories.helper.js";
+import { TaskClass } from "./classes/task.js";
 const taskNameInputElement = document.querySelector("#name");
 const addButtonElement = document.querySelector("button");
 const tasksContainerElement = document.querySelector(".tasks");
@@ -14,21 +15,9 @@ const categories = [
     Category.SOCIAL,
 ];
 const tasks = [
-    {
-        name: "Wyrzucic smieci",
-        done: false,
-        category: Category.HOBBY,
-    },
-    {
-        name: "Pojsc na silke",
-        done: true,
-        category: Category.GYM,
-    },
-    {
-        name: "Nakarmic psa",
-        done: false,
-        category: Category.WORK,
-    },
+    new Task("Wyrzucic smieci", false, Category.HOBBY),
+    new Task("Pojsc na silke", true, Category.GYM),
+    new Task("Nakarmic koty", false),
 ];
 const addTask = (task) => {
     tasks.push(task);
@@ -38,21 +27,16 @@ const updateSelectedCategory = (newCategory) => {
 };
 addButtonElement.addEventListener("click", (event) => {
     event.preventDefault();
-    addTask({
-        name: taskNameInputElement.value,
-        done: false,
-        category: selectedCategory,
-    });
+    const newTask = new Task(taskNameInputElement.value, false, selectedCategory);
+    addTask(newTask);
+    newTask.logCreationDate("!!");
     renderTasks(tasks, tasksContainerElement);
 });
-const task = [
-    "zrobic klatke",
-    Category.GYM,
-    false,
-];
+const task = ["zrobic klatke", Category.GYM, false];
 const taskName = task[0];
 const taskCategory = task[1];
 const taskDoneStatus = task[2];
-addTask({ name: taskName, category: taskCategory, done: taskDoneStatus });
 renderCategories(categories, categoriesContainerElement, updateSelectedCategory);
 renderTasks(tasks, tasksContainerElement);
+const taskClassInstance = new TaskClass("Zadanie z constructora", false, Category.GYM);
+console.log(taskClassInstance.name);
