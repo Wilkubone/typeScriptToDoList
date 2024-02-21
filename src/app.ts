@@ -54,7 +54,18 @@ addButtonElement.addEventListener("click", (event: Event) => {
 	renderTasks(tasks, tasksContainerElement);
 });
 
-addTask({ name: "zrobic nogi", category: Category.GYM, done: false });
+type TaskAsTuple = [string, Category, boolean];
+
+const task: TaskAsTuple = [
+	"zrobic klatke",
+	Category.GYM,
+	false,
+];
+const taskName = task[0];
+const taskCategory = task[1];
+const taskDoneStatus = task[2];
+
+addTask({ name: taskName, category: taskCategory, done: taskDoneStatus });
 renderCategories(
 	categories,
 	categoriesContainerElement,
